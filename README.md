@@ -9,6 +9,7 @@ In the project directory, you can run:
     
   cd solvative_task
   npm i
+  enter api key and secret values in fetch function
   npm start
 
   ```

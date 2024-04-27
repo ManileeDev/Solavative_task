@@ -7,9 +7,10 @@ import axios from 'axios';
 function App() {
     const [cities, setCities] = useState([]);
     const [search, setSearch] = useState('');
-    const [limit, setLimit] = useState(5);
+    const [limit, setLimit] = useState(10);
     const [row, setRow] = useState(3);
     const [page, setPage] = useState(1);
+    const [loading, setLoading] = useState(false);
 
     const rowVal = useRef();
     const limitVal = useRef();
@@ -19,6 +20,7 @@ function App() {
     const currentCities = cities.slice(indexOfFirstCity, indexOfLastCity);
 
     const fetchData = () => {
+      setLoading(true)
         var options = {
             method: 'GET',
             url: 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities',
@@ -31,14 +33,16 @@ function App() {
 
         axios.request(options).then(function (response) {
             setCities(response.data.data);
+            setLoading(false)
         }).catch(function (error) {
             console.error(error);
         });
+        
     }
   return (
     <div className="App">
       <div className='input-fields'>
-      <Search  setSearch={setSearch} fetchData={fetchData}/>
+      <Search  setSearch={setSearch} fetchData={fetchData} loading={loading}/>
       <div className='search-container'>
         <div className='search-box'>
                 <input type='text' placeholder='Row Count' ref={rowVal} />
@@ -51,7 +55,7 @@ function App() {
             </div></div>
       </div>
       
-      <Table setPage={setPage} setLimit={setLimit} cities={cities} row={row} setRow={setRow} indexOfFirstCity={indexOfFirstCity} currentCities={currentCities} />
+      <Table setPage={setPage} setLimit={setLimit} cities={cities} row={row} setRow={setRow} indexOfFirstCity={indexOfFirstCity} currentCities={currentCities}/>
     </div>
   );
 }
